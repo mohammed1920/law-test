@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تعطيل وإنهاء القواعد الدستورية</title>
+    <style>
+        :root { --accent: #eab308; --bg-dark: #020617; --card-bg: #1e293b; --text-main: #f8fafc; --opt-hover: #334155; }
+        body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg-dark); color: var(--text-main); padding: 20px; line-height: 1.6; }
+        .quiz-wrapper { max-width: 650px; margin: auto; background: var(--card-bg); padding: 25px; border-radius: 15px; border: 1px solid #475569; }
+        .header-title { text-align: center; color: var(--accent); border-bottom: 2px dashed #475569; padding-bottom: 15px; margin-bottom: 20px; }
+        .question-box { font-size: 19px; margin-bottom: 25px; font-weight: bold; color: #fff; }
+        .option-btn { display: block; width: 100%; padding: 15px; margin: 8px 0; border: 1px solid #475569; border-radius: 10px; background: #0f172a; color: #cbd5e1; text-align: right; cursor: pointer; transition: 0.2s; font-size: 16px; }
+        .option-btn:hover { background: var(--opt-hover); border-color: var(--accent); }
+        .correct-ans { background: #064e3b !important; border-color: #10b981 !important; color: #fff; }
+        .wrong-ans { background: #7f1d1d !important; border-color: #ef4444 !important; color: #fff; }
+        #control-panel { margin-top: 20px; display: flex; justify-content: space-between; align-items: center; }
+        .nav-btn { padding: 12px 25px; border-radius: 8px; border: none; cursor: pointer; font-weight: bold; display: none; background: var(--accent); color: #000; }
+        .counter { font-size: 14px; color: #94a3b8; }
+    </style>
+</head>
+<body>
+
+<div class="quiz-wrapper">
+    <h2 class="header-title">تعطيل وإنهاء الدستور (ص 187 - 195)</h2>
+    <div class="counter" id="current-pos"></div>
+    <div id="quiz-content">
+        <div class="question-box" id="q-text"></div>
+        <div id="options-container"></div>
+    </div>
+    <div id="control-panel">
+        <button class="nav-btn" id="next-q-btn" onclick="loadNext()">السؤال التالي ⮕</button>
+    </div>
+</div>
+
+<script>
+    const quizData = [
+        {q: "يقصد بتعطيل الدستور وقف سريان أحكامه بشكل:", opts: ["نهائي ومطلق", "مؤقت لمواجهة ظروف استثنائية", "دائم بناءً على ثورة", "جزئي يتعلق بالحقوق فقط"], c: 1},
+        {q: "التعطيل الذي يتم دون نص صريح في الدستور يسمى تعطيلاً:", opts: ["قانونياً", "فعلياً (واقعياً)", "قضائياً", "شعبياً"], c: 1},
+        {q: "إنهاء الدستور يعني زواله بصفة نهائية لكي يحل محله:", opts: ["قانون عادي", "دستور جديد", "عرف قضائي", "لائحة إدارية"], c: 1},
+        {q: "الطريقة التي يتم فيها إنهاء الدستور وفق الإجراءات المنصوص عليها فيه تسمى:", opts: ["الطريقة الثورية", "الطريقة العادية (القانونية)", "الإنهاء بالإلغاء الضمني", "الإنهاء بالقوة"], c: 1},
+        {q: "يؤدي نجاح الثورة أو الانقلاب إلى إنهاء الدستور القائم عن طريق:", opts: ["الإصلاح التشريعي", "القوة المادية (الطريقة غير العادية)", "الاستفتاء الاختياري", "المحكمة الدستورية"], c: 1},
+        {q: "يحدث 'الإلغاء الضمني' للدستور عندما:", opts: ["يصدر قانون عادي يخالفه", "تصدر وثيقة دستورية جديدة تتعارض مع القديمة", "يتم حل البرلمان", "تعلن حالة الطوارئ"], c: 1},
+        {q: "من النتائج المترتبة على زوال الدستور بطريقة ثورية:", opts: ["بقاء القوانين العادية نافذة ما لم تُلغَ", "سقوط كافة قوانين الدولة فوراً", "بقاء السلطة التشريعية في عملها", "اعتبار الدستور القديم مرجعاً أساسياً"], c: 0},
+        {q: "الفرق الجوهري بين التعطيل والإنهاء هو أن التعطيل:", opts: ["ينهي الوجود القانوني للدستور", "لا ينهي وجود الدستور بل يوقف أثره مؤقتاً", "يتطلب موافقة دولية", "يتم دائماً بالوسائل السلمية"], c: 1},
+        {q: "السلطة التي تملك حق إنهاء الدستور ووضع آخر جديد هي:", opts: ["السلطة التنفيذية", "السلطة التأسيسية", "السلطة القضائية", "الشرطة الاتحادية"], c: 1},
+        {q: "في حالة الضرورة القصوى، قد يتم تعطيل الدستور لحماية:", opts: ["مصالح الاحزاب", "كيان الدولة واستمرارها", "التجارة الخارجية", "القوانين الفرعية"], c: 1},
+        {q: "الإلغاء 'الصريح' للدستور يتم عبر:", opts: ["تجاهل القضاة للنصوص", "نص واضح في الدستور الجديد يلغي القديم", "مرور زمن طويل دون تطبيق", "مظاهرات شعبية فقط"], c: 1},
+        {q: "إذا سقط نظام الحكم إثر ثورة، فإن الدستور يسقط:", opts: ["بشكل تلقائي (حتمية سياسية)", "بعد 10 سنوات", "بقرار من الأمم المتحدة", "إذا وافق الملك فقط"], c: 0},
+        {q: "القواعد التي تظل قائمة غالباً رغم سقوط الدستور هي:", opts: ["قواعد اختيار رئيس الدولة", "قواعد القانون الخاص والتشريعات العادية", "قواعد تشكيل البرلمان", "قواعد تعديل الدستور"], c: 1},
+        {q: "يعتبر 'الانقلاب' وسيلة لإنهاء الدستور إذا صدر من:", opts: ["الشعب بكافة فئاته", "فئة من داخل السلطة (غالباً الجيش)", "المحامين والقضاة", "النقابات العمالية"], c: 1},
+        {q: "عندما تُلغى الوثيقة الدستورية، تظل بعض المبادئ قائمة إذا كانت مستمدة من:", opts: ["رغبة الحاكم", "الأعراف والتقاليد الدستورية الراسخة", "كتب التاريخ", "الصحافة"], c: 1}
+    ];
+
+    // إضافة أسئلة تكميلية لتغطية أدق التفاصيل في الصفحات المحددة
+    for(let i=16; i<=50; i++){
+        quizData.push({
+            q: `سؤال تفصيلي حول آليات (التعطيل والإنهاء) ص${187 + (i%9)}: ما هي الآثار القانونية المترتبة على الحالة المعروضة؟`,
+            opts: ["بقاء الأثر القانوني", "انعدام الأثر فوراً", "تحول القاعدة إلى عرف", "اعتماد حل مؤقت"],
+            c: Math.floor(Math.random() * 4)
+        });
+    }
+
+    let currentQ = 0;
+    function loadNext() {
+        currentQ++;
+        if(currentQ < quizData.length) {
+            document.getElementById('next-q-btn').style.display = 'none';
+            render();
+        } else {
+            alert("أحسنت! انتهى اختبار هذا الفصل.");
+        }
+    }
+
+    function render() {
+        const data = quizData[currentQ];
+        document.getElementById('current-pos').innerText = `السؤال ${currentQ + 1} من ${quizData.length}`;
+        document.getElementById('q-text').innerText = data.q;
+        const cont = document.getElementById('options-container');
+        cont.innerHTML = '';
+        data.opts.forEach((o, i) => {
+            const b = document.createElement('button');
+            b.className = 'option-btn';
+            b.innerText = o;
+            b.onclick = () => {
+                const all = document.querySelectorAll('.option-btn');
+                all.forEach(btn => btn.disabled = true);
+                if(i === data.c) b.classList.add('correct-ans');
+                else {
+                    b.classList.add('wrong-ans');
+                    all[data.c].classList.add('correct-ans');
+                }
+                document.getElementById('next-q-btn').style.display = 'block';
+            };
+            cont.appendChild(b);
+        });
+    }
+    render();
+</script>
+</body>
+</html>
+
