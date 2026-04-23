@@ -1,29 +1,50 @@
-// 1. إعداد الموسيقى الخلفية
-const bgMusic = new Audio('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3');
-bgMusic.loop = true;
-bgMusic.volume = 0.2; // صوت هادئ
+// 1. تعريف جميع الأصوات
+const sounds = {
+    bg: new Audio('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3'),
+    correct: new Audio('https://actions.google.com/sounds/v1/cartoon/clink_clanking.ogg'),
+    wrong: new Audio('https://actions.google.com/sounds/v1/cartoon/boing.ogg')
+};
 
-// 2. إعداد أصوات الإجابات (باستخدام روابط مباشرة وسريعة جداً)
-const correctSound = new Audio('https://actions.google.com/sounds/v1/cartoon/clink_clanking.ogg');
-const wrongSound = new Audio('https://actions.google.com/sounds/v1/cartoon/boing.ogg');
+// 2. إعدادات الصوت
+sounds.bg.loop = true;
+sounds.bg.volume = 0.2;
 
-// 3. محرك الإيقاظ (Unlock) عند أول لمسة
-document.addEventListener('click', function() {
-    if (bgMusic.paused) {
-        bgMusic.play().catch(e => console.log("المتصفح ينتظر نقرة"));
-    }
-    // تحميل مسبق للأصوات لضمان السرعة
-    correctSound.load();
-    wrongSound.load();
-}, { once: true });
+// 3. دالة "الإيقاظ الشامل" (تفعيل كل المسارات الصوتية بنقرة واحدة)
+function setupAudio() {
+    // تشغيل الموسيقى
+    sounds.bg.play().catch(() => {});
+    
+    // تشغيل أصوات التفاعل صامتة للحظة ثم إيقافها (لفتح قفل المتصفح)
+    sounds.correct.muted = true;
+    sounds.correct.play().then(() => {
+        sounds.correct.pause();
+        sounds.correct.muted = false;
+        sounds.correct.currentTime = 0;
+    }).catch(() => {});
 
-// 4. الدوال التي تستدعيها ملفات HTML (يجب أن تكون بهذه الأسماء بالضبط)
+    sounds.wrong.muted = true;
+    sounds.wrong.play().then(() => {
+        sounds.wrong.pause();
+        sounds.wrong.muted = false;
+        sounds.wrong.currentTime = 0;
+    }).catch(() => {});
+}
+
+// تفعيل النظام عند أول لمسة
+document.addEventListener('click', setupAudio, { once: true });
+document.addEventListener('touchstart', setupAudio, { once: true });
+
+// 4. الدوال التي تناديها ملفات الـ HTML
 function playCorrect() {
-    correctSound.currentTime = 0; // إعادة الصوت للبداية لكي يعمل مع كل نقرة سريعة
-    correctSound.play().catch(e => console.log("خطأ في تشغيل صوت الصح"));
+    if (sounds.correct) {
+        sounds.correct.currentTime = 0;
+        sounds.correct.play().catch(e => console.log("خطأ صوت الصح"));
+    }
 }
 
 function playWrong() {
-    wrongSound.currentTime = 0; // إعادة الصوت للبداية
-    wrongSound.play().catch(e => console.log("خطأ في تشغيل صوت الخطأ"));
+    if (sounds.wrong) {
+        sounds.wrong.currentTime = 0;
+        sounds.wrong.play().catch(e => console.log("خطأ صوت الخطأ"));
+    }
 }
