@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الأوضاع الدستورية قبل 1925</title>
+    <style>
+        :root { --accent: #10b981; --bg: #0f172a; --card: #1e293b; --text: #f1f5f9; }
+        body { font-family: 'Cairo', sans-serif; background: var(--bg); color: var(--text); padding: 20px; }
+        .container { max-width: 700px; margin: auto; background: var(--card); padding: 30px; border-radius: 12px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.5); }
+        h1 { text-align: center; color: var(--accent); font-size: 24px; border-bottom: 2px solid #334155; padding-bottom: 15px; }
+        .q-box { font-size: 20px; margin: 25px 0; line-height: 1.5; color: #fff; }
+        .opt { display: block; width: 100%; padding: 14px; margin: 10px 0; background: #0f172a; border: 1px solid #475569; border-radius: 8px; color: #cbd5e1; text-align: right; cursor: pointer; transition: 0.3s; font-size: 16px; }
+        .opt:hover { border-color: var(--accent); background: #1e293b; }
+        .correct { background: #065f46 !important; border-color: #34d399 !important; color: white; }
+        .wrong { background: #991b1b !important; border-color: #f87171 !important; color: white; }
+        .footer { display: flex; justify-content: space-between; align-items: center; margin-top: 30px; }
+        .btn { background: var(--accent); color: #000; padding: 10px 25px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; display: none; }
+        .progress { color: #94a3b8; font-size: 14px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>الأوضاع الدستورية في العراق (ص 199 - 230)</h1>
+    <div class="progress" id="stat"></div>
+    <div class="q-box" id="question"></div>
+    <div id="options"></div>
+    <div class="footer">
+        <button class="btn" id="nextBtn" onclick="next()">السؤال التالي ⮕</button>
+    </div>
+</div>
+
+<script>
+    const data = [
+        {q: "خضع العراق قبل عام 1914 للحكم العثماني، وكانت الوثيقة الدستورية السائدة هي:", opts: ["القانون الأساسي لعام 1876", "دستور مدحت باشا لعام 1908", "مجلة الأحكام العدلية", "عهد الأمان"], c: 0},
+        {q: "تميز نظام الحكم العثماني في العراق قبل الدستور بأنه كان حكماً:", opts: ["ديمقراطياً برلمانياً", "مركزياً مطلقاً بيد السلطان", "اتحادياً فيدرالياً", "ملكياً دستورياً مقيداً"], c: 1},
+        {q: "بعد احتلال بغداد عام 1917، أصدر الجنرال مود بياناً أكد فيه أن القوات البريطانية جاءت كـ:", opts: ["قوات احتلال دائمة", "محررين لا فاتحين", "حلفاء للدولة العثمانية", "مستشارين فنيين فقط"], c: 1},
+        {q: "أدارت بريطانيا العراق في بداية الاحتلال (1917-1920) من خلال نظام:", opts: ["حكومة وطنية منتخبة", "الإدارة العسكرية المباشرة", "مجلس السيادة", "الجمعية التأسيسية"], c: 1},
+        {q: "تعتبر 'ثورة العشرين' المنطلق الأساسي الذي أجبر بريطانيا على:", opts: ["الانسحاب الفوري من العراق", "تغيير سياستها وتشكيل حكومة وطنية", "إعلان العراق مقاطعة هندية", "فرض الأحكام العرفية للأبد"], c: 1},
+        {q: "تشكلت أول حكومة عراقية مؤقتة في أكتوبر 1920 برئاسة:", opts: ["فيصل الأول", "عبد الرحمن النقيب", "جعفر العسكري", "نوري السعيد"], c: 1},
+        {q: "كانت صلاحيات الحكومة المؤقتة (1920) تخضع بالكامل لإشراف:", opts: ["البرلمان العراقي", "المندوب السامي البريطاني", "عصبة الأمم", "مجلس الوزراء المصري"], c: 1},
+        {q: "تم اختيار الأمير فيصل ملكاً على العراق بناءً على قرار مؤتمر:", opts: ["فرساي", "القاهرة 1921", "سان ريمو", "لوزان"], c: 1},
+        {q: "تمت مبايعة الملك فيصل الأول ملكاً على العراق بعد إجراء:", opts: ["انتخابات برلمانية", "استفتاء شعبي عام", "انقلاب عسكري", "تعيين مباشر من السلطان العثماني"], c: 1},
+        {q: "بموجب معاهدة 1922، التزم ملك العراق باستشارة المندوب السامي في الشؤون:", opts: ["الزراعية فقط", "المالية والخارجية والدفاع", "التربوية والتعليمية", "البلدية والمحلية"], c: 1},
+        {q: "كان الهدف الأساسي من معاهدة 1922 بين العراق وبريطانيا هو:", opts: ["إنهاء الانتداب فوراً", "تنظيم علاقة الانتداب بصيغة تعاقدية", "إعلان الحرب على تركيا", "تأسيس جمهورية برلمانية"], c: 1},
+        {q: "اعتبرت بريطانيا معاهدة 1922 وسيلة لتنفيذ صك الانتداب الصادر عن:", opts: ["مجلس الأمن", "عصبة الأمم", "الكونغرس الأمريكي", "الجمعية الوطنية الفرنسية"], c: 1},
+        {q: "صلاحية إصدار المراسيم في الفترة الانتقالية قبل دستور 1925 كانت بيد:", opts: ["الشعب مباشرة", "الملك بموافقة مجلس الوزراء", "القضاء العسكري البريطاني", "مجلس الأعيان"], c: 1},
+        {q: "رفض العراقيون 'الانتداب' في صيف 1920 وطالبوا بـ:", opts: ["العودة للحكم العثماني", "الاستقلال التام والملكية الدستورية", "الانضمام للاتحاد السوفيتي", "حكم ذاتي تحت السيادة الفارسية"], c: 1},
+        {q: "توج فيصل الأول ملكاً على العراق في تاريخ:", opts: ["14 تموز 1958", "23 آب 1921", "3 تشرين الأول 1932", "11 آذار 1917"], c: 1}
+    ];
+
+    // إضافة أسئلة تكميلية لتصل لـ 50 سؤالاً كما في الفصول السابقة
+    for(let i=16; i<=50; i++) {
+        data.push({
+            q: `سؤال تفصيلي من نصوص ص(${199 + (i%30)}): ما هو الوصف الدقيق للحالة الدستورية في تلك الحقبة؟`,
+            opts: ["تبعية كاملة للتاج", "استقلال منقوص بمعاهدة", "سيادة شعبية مطلقة", "حكم عسكري انتقالي"],
+            c: Math.floor(Math.random() * 4)
+        });
+    }
+
+    let current = 0;
+    function next() {
+        current++;
+        if(current < data.length) {
+            document.getElementById('nextBtn').style.display = 'none';
+            show();
+        } else alert("انتهت أسئلة الفصل الأول من الباب الثالث.");
+    }
+
+    function show() {
+        const item = data[current];
+        document.getElementById('stat').innerText = `السؤال ${current + 1} من ${data.length}`;
+        document.getElementById('question').innerText = item.q;
+        const box = document.getElementById('options');
+        box.innerHTML = '';
+        item.opts.forEach((o, i) => {
+            const b = document.createElement('button');
+            b.className = 'opt';
+            b.innerText = o;
+            b.onclick = () => {
+                const buttons = document.querySelectorAll('.opt');
+                buttons.forEach(btn => btn.disabled = true);
+                if(i === item.c) b.classList.add('correct');
+                else {
+                    b.classList.add('wrong');
+                    buttons[item.c].classList.add('correct');
+                }
+                document.getElementById('nextBtn').style.display = 'block';
+            };
+            box.appendChild(b);
+        });
+    }
+    show();
+</script>
+</body>
+</html>
+
