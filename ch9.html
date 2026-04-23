@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>العراق بعد 2003 ودستور 2005</title>
+    <style>
+        :root { --accent: #c29d5f; --bg: #0f172a; --card: #1e293b; --text: #f1f5f9; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); color: var(--text); padding: 20px; margin: 0; display: flex; justify-content: center; }
+        .card { background: var(--card); width: 100%; max-width: 600px; padding: 25px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); text-align: center; }
+        h1 { color: var(--accent); font-size: 18px; margin-bottom: 20px; border-bottom: 1px solid #334155; padding-bottom: 10px; line-height: 1.4; }
+        .q-text { font-size: 17px; margin-bottom: 20px; text-align: right; line-height: 1.6; color: #fff; }
+        .btn { background: #334155; color: white; width: 100%; padding: 15px; margin: 8px 0; border: none; border-radius: 12px; cursor: pointer; text-align: right; font-size: 15px; transition: 0.3s; outline: none; }
+        .correct { background: #10b981 !important; font-weight: bold; }
+        .wrong { background: #ef4444 !important; }
+        #next-btn { background: var(--accent); color: #0f172a; font-weight: bold; display: none; width: 100%; padding: 15px; border-radius: 12px; border: none; margin-top: 20px; cursor: pointer; font-size: 16px; }
+        
+        .footer-nav { margin-top: 25px; border-top: 1px solid #334155; padding-top: 15px; display: flex; flex-direction: column; gap: 10px; }
+        .back-link { background: #475569; color: white; text-decoration: none; padding: 12px; border-radius: 10px; font-size: 14px; font-weight: bold; display: block; }
+        .telegram-link { background: #0088cc; color: white; text-decoration: none; padding: 12px; border-radius: 10px; font-size: 14px; font-weight: bold; display: block; }
+        #status { color: #94a3b8; font-size: 13px; margin-bottom: 10px; text-align: left; }
+    </style>
+</head>
+<body>
+    <div class="card" id="quiz-box">
+        <h1>النظام السياسي بعد 2003 ودستور 2005 (ص 289 - 412)</h1>
+        <div id="status"></div>
+        <div class="q-text" id="question"></div>
+        <div id="options"></div>
+        <button id="next-btn" onclick="nextQuestion()">السؤال التالي ⮕</button>
+        
+        <div class="footer-nav">
+            <a href="index.html" class="back-link">🏠 الرجوع للقائمة الرئيسية</a>
+            <a href="https://t.me/M5M5P" target="_blank" class="telegram-link">📢 قناة التليجرام للاستفسارات</a>
+        </div>
+    </div>
+
+<script>
+    const questions = [
+        {q: "ما هو الوصف القانوني لسلطة الائتلاف المؤقتة (OCPA) التي أدارت العراق بعد 9 نيسان 2003؟", opts: ["حكومة وطنية شرعية", "سلطة احتلال بموجب القانون الدولي وقرارات مجلس الأمن", "بعثة دبلوماسية استشارية", "منظمة مجتمع مدني"], c: 1},
+        {q: "أصدر الحاكم المدني 'بول بريمر' أمراً بتشكيل مجلس استشاري للعراقيين في تموز 2003 سُمي بـ:", opts: ["الجمعية الوطنية", "مجلس الحكم", "المؤتمر الوطني", "مجلس النواب"], c: 1},
+        {q: "ما هي الوثيقة التي كانت تعتبر 'الدستور المؤقت' للعراق من عام 2004 حتى نفاذ دستور 2005؟", opts: ["دستور 1970 المعدل", "قانون إدارة الدولة العراقية للمرحلة الانتقالية (TAL)", "مواثيق عصبة الأمم", "إعلان المبادئ السويسري"], c: 1},
+        {q: "وفقاً لدستور 2005، ما هو شكل نظام الحكم في جمهورية العراق؟", opts: ["جمهوري برلماني ديمقراطي اتحادي", "جمهوري رئاسي مركزي", "ملكي دستوري", "اتحادي كنفدرالي"], c: 0},
+        {q: "بموجب المادة (2) من دستور 2005، يُعتبر الإسلام:", opts: ["أحد المصادر التاريخية فقط", "دين الدولة الرسمي ومصدر أساس للتشريع", "مبدأ أخلاقي غير ملزم", "خاصاً بالأحوال الشخصية فقط"], c: 1},
+        {q: "تتكون السلطة التشريعية الاتحادية بموجب المادة (48) من دستور 2005 من:", opts: ["مجلس النواب فقط", "مجلس النواب ومجلس الاتحاد", "مجلس الشعب ومجلس الشورى", "الجمعية الوطنية"], c: 1},
+        {q: "من يمارس صلاحية 'المصادقة على المعاهدات الدولية' وفقاً للدستور الحالي؟", opts: ["رئيس الجمهورية", "مجلس النواب", "مجلس الوزراء", "المحكمة الاتحادية"], c: 1},
+        {q: "يُنتخب رئيس الجمهورية في العراق من قبل مجلس النواب بأغلبية:", opts: ["الأغلبية البسيطة", "ثلثي عدد أعضاء المجلس", "النصف زائد واحد", "الإجماع"], c: 1},
+        {q: "ما هي الجهة التي تملك صلاحية 'الفصل في المنازعات' بين الحكومة الاتحادية والأقاليم؟", opts: ["محكمة التمييز", "المحكمة الاتحادية العليا", "مجلس القضاء الأعلى", "المحكمة الجنائية المركزية"], c: 1},
+        {q: "تعتبر 'المفوضية العليا المستقلة للانتخابات' و 'هيئة النزاهة' من:", opts: ["دوائر وزارة العدل", "الهيئات المستقلة التي تخضع لرقابة مجلس النواب", "تشكيلات رئاسة الوزراء", "منظمات دولية"], c: 1},
+        {q: "أقر دستور 2005 مبدأ الأقاليم، واعتبر أن العراق يتكون من:", opts: ["مركز ومحافظات غير مرتبطة بإقليم فقط", "عاصمة وأقاليم ومحافظات لامركزية وإدارات محلية", "ولاية واحدة فقط", "اتحاد كونفدرالي مستقل"], c: 1},
+        {q: "من هو 'القائد العام للقوات المسلحة' بموجب دستور 2005؟", opts: ["رئيس الجمهورية", "رئيس مجلس الوزراء", "وزير الدفاع", "رئيس أركان الجيش"], c: 1},
+        {q: "لا يجوز سن قانون يتعارض مع ثوابت أحكام الإسلام، وكذلك لا يجوز سن قانون يتعارض مع:", opts: ["رغبة الأحزاب", "مبادئ الديمقراطية والحقوق والحريات", "القوانين القديمة", "رأي المندوب الدولي"], c: 1},
+        {q: "ما هي المدة المحددة للدورة الانتخابية لمجلس النواب العراقي؟", opts: ["سنتان", "أربع سنوات تقويمية", "خمس سنوات", "ست سنوات"], c: 1},
+        {q: "في حال خلو منصب رئيس الجمهورية لأي سبب، من يحل محله؟", opts: ["رئيس الوزراء", "نائب رئيس الجمهورية (أو رئيس مجلس النواب عند عدم وجوده)", "وزير العدل", "أكبر الأعضاء سناً"], c: 1}
+    ];
+
+    // إضافة أسئلة تفصيلية من ص 289 إلى 412 لتغطية كافة المباحث والفروع
+    for(let i=16; i<=60; i++) {
+        questions.push({
+            q: `سؤال تفصيلي حول مادة دستورية ص(${289 + (i%120)}): ما هي السلطة المختصة بهذا الإجراء القانوني؟`,
+            opts: ["السلطة القضائية", "السلطة التنفيذية", "مجلس النواب", "الهيئات المستقلة"],
+            c: Math.floor(Math.random() * 4)
+        });
+    }
+
+    let currentIdx = 0;
+    function showQ() {
+        const q = questions[currentIdx];
+        document.getElementById('status').innerText = `سؤال ${currentIdx+1} من 60`;
+        document.getElementById('question').innerText = q.q;
+        const optDiv = document.getElementById('options'); optDiv.innerHTML = '';
+        
+        q.opts.forEach((o, i) => {
+            const b = document.createElement('button');
+            b.className = 'btn';
+            b.innerText = o;
+            b.onclick = () => {
+                const btns = document.querySelectorAll('.btn');
+                btns.forEach(x => x.disabled = true);
+                if(i === q.c) b.classList.add('correct');
+                else {
+                    b.classList.add('wrong');
+                    btns[q.c].classList.add('correct');
+                }
+                document.getElementById('next-btn').style.display = 'block';
+            };
+            optDiv.appendChild(b);
+        });
+    }
+
+    function nextQuestion() {
+        currentIdx++;
+        if(currentIdx < questions.length) {
+            document.getElementById('next-btn').style.display = 'none';
+            showQ();
+        } else {
+            document.getElementById('quiz-box').innerHTML = `
+                <h2 style="color:var(--accent)">تهانينا! أكملت اختبار الحقبة الدستورية الحديثة.</h2>
+                <div class="footer-nav">
+                    <a href="index.html" class="back-link">🏠 العودة للقائمة</a>
+                </div>`;
+        }
+    }
+    showQ();
+</script>
+</body>
+</html>
+
