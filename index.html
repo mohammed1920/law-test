@@ -7,55 +7,61 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;900&display=swap" rel="stylesheet">
     <style>
         :root { --primary: #c29d5f; --bg: #0f172a; --card: #1e293b; --text: #f1f5f9; }
-        body { font-family: 'Cairo', sans-serif; background-color: var(--bg); color: var(--text); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
-        .dashboard { width: 100%; max-width: 500px; background: var(--card); padding: 30px; border-radius: 20px; text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.05); }
-        .book-title { color: var(--primary); font-size: 22px; font-weight: 900; margin-bottom: 5px; }
-        .part-title { color: #e2e8f0; font-size: 18px; margin-bottom: 5px; font-weight: 700; }
-        .author { color: #94a3b8; font-size: 13px; margin-bottom: 25px; }
-        .menu-label { text-align: right; font-size: 14px; margin-bottom: 15px; color: #cbd5e1; border-right: 3px solid var(--primary); padding-right: 10px; }
-        .parts-grid { display: grid; gap: 12px; }
-        .part-card { background: #334155; padding: 18px; border-radius: 12px; text-decoration: none; color: white; display: flex; justify-content: space-between; align-items: center; transition: 0.2s; border: 1px solid transparent; }
-        .part-card:hover { border-color: var(--primary); background: #475569; transform: scale(1.02); }
-        .part-info { text-align: right; }
-        .part-name { display: block; font-weight: bold; font-size: 15px; }
-        .arrow { color: var(--primary); font-weight: bold; }
-        .tg-footer { margin-top: 25px; display: block; padding: 10px; border: 1px dashed #38bdf8; color: #38bdf8; text-decoration: none; border-radius: 10px; font-size: 13px; }
+        body { font-family: 'Cairo', sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 20px; line-height: 1.6; }
+        .container { max-width: 600px; margin: 0 auto; }
+        .dashboard { background: var(--card); padding: 25px; border-radius: 20px; text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.05); }
+        .book-title { color: var(--primary); font-size: 24px; font-weight: 900; margin-bottom: 5px; }
+        .author { color: #94a3b8; font-size: 14px; margin-bottom: 25px; }
+        
+        .unit-section { text-align: right; margin-bottom: 25px; }
+        .unit-title { color: var(--primary); font-size: 18px; font-weight: bold; border-bottom: 2px solid #334155; padding-bottom: 5px; margin-bottom: 15px; display: block; }
+        
+        .parts-grid { display: grid; gap: 10px; }
+        .part-card { background: #334155; padding: 15px; border-radius: 12px; text-decoration: none; color: white; display: flex; justify-content: space-between; align-items: center; transition: 0.2s; }
+        .part-card:hover { background: #475569; transform: scale(1.01); border-right: 4px solid var(--primary); }
+        .part-name { font-size: 14px; font-weight: 600; }
+        .arrow { color: var(--primary); }
+
+        .tg-footer { margin-top: 30px; display: block; padding: 12px; border: 1px dashed #38bdf8; color: #38bdf8; text-decoration: none; border-radius: 10px; font-size: 13px; text-align: center; }
     </style>
 </head>
 <body>
 
+<div class="container">
     <div class="dashboard">
         <div class="book-title">مبادئ القانون الدستوري</div>
-        <div class="part-title">الباب الأول: نظرية الدولة</div>
         <div class="author">الأستاذ الدكتور حميد حنون خالد</div>
-        
-        <div class="menu-label">اختر الفصل الدراسي:</div>
-        
-        <div class="parts-grid">
-            <a href="chapter1.html" class="part-card">
-                <div class="part-info">
-                    <span class="part-name">الفصل الأول: أصل الدولة</span>
-                </div>
-                <span class="arrow">←</span>
-            </a>
 
-            <a href="chapter2.html" class="part-card">
-                <div class="part-info">
-                    <span class="part-name">الفصل الثاني: الدولة وأركانها</span>
-                </div>
-                <span class="arrow">←</span>
-            </a>
-
-            <a href="chapter3.html" class="part-card">
-                <div class="part-info">
-                    <span class="part-name">الفصل الثالث: أنواع الدول</span>
-                </div>
-                <span class="arrow">←</span>
-            </a>
+        <div class="unit-section">
+            <span class="unit-title">الباب الأول: نظرية الدولة</span>
+            <div class="parts-grid">
+                <a href="ch1.html" class="part-card"><span class="part-name">الفصل 1: أصل الدولة</span><span class="arrow">←</span></a>
+                <a href="ch2.html" class="part-card"><span class="part-name">الفصل 2: الدولة وأركانها</span><span class="arrow">←</span></a>
+                <a href="ch3.html" class="part-card"><span class="part-name">الفصل 3: أنواع الدول</span><span class="arrow">←</span></a>
+            </div>
         </div>
 
-        <a href="https://t.me/M5M5P" target="_blank" class="tg-footer">📢 تابع قناتنا: M5M5P@</a>
+        <div class="unit-section">
+            <span class="unit-title">الباب الثاني: نظرية الدستور</span>
+            <div class="parts-grid">
+                <a href="ch4.html" class="part-card"><span class="part-name">الفصل 1: مصادر القواعد الدستورية</span><span class="arrow">←</span></a>
+                <a href="ch5.html" class="part-card"><span class="part-name">الفصل 2: مفهوم الدستور</span><span class="arrow">←</span></a>
+                <a href="ch6.html" class="part-card"><span class="part-name">الفصل 3: تعطيل وإنهاء القواعد الدستورية</span><span class="arrow">←</span></a>
+            </div>
+        </div>
+
+        <div class="unit-section">
+            <span class="unit-title">الباب الثالث: التاريخ الدستوري للعراق</span>
+            <div class="parts-grid">
+                <a href="ch7.html" class="part-card"><span class="part-name">الفصل 1: الأوضاع قبل دستور 1925</span><span class="arrow">←</span></a>
+                <a href="ch8.html" class="part-card"><span class="part-name">الفصل 2: دساتير العهد الجمهوري (1958-2003)</span><span class="arrow">←</span></a>
+                <a href="ch9.html" class="part-card"><span class="part-name">الفصل 3: النظام السياسي بعد الاحتلال الأمريكي</span><span class="arrow">←</span></a>
+            </div>
+        </div>
+
+        <a href="https://t.me/M5M5P" target="_blank" class="tg-footer">📢 انضم لقناة التليجرام: M5M5P@</a>
     </div>
+</div>
 
 </body>
 </html>
