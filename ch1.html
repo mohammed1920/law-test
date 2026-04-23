@@ -16,7 +16,6 @@
         #next { background: var(--primary); color: #0f172a; font-weight: bold; display: none; width: 100%; padding: 15px; border-radius: 10px; border: none; margin-top: 20px; cursor: pointer; font-size: 16px; }
         .nav-footer { display: flex; justify-content: space-between; margin-top: 25px; gap: 10px; border-top: 1px solid #334155; padding-top: 15px; }
         .back-btn { background: #475569; color: white; text-decoration: none; padding: 10px; border-radius: 8px; font-size: 12px; flex: 1; text-align: center; }
-        .tg-link { border: 1px dashed #38bdf8; color: #38bdf8; text-decoration: none; padding: 10px; border-radius: 8px; font-size: 12px; flex: 1; text-align: center; }
     </style>
 </head>
 <body>
@@ -28,7 +27,7 @@
         <button id="next" onclick="nextQ()">السؤال التالي ←</button>
         <div class="nav-footer">
             <a href="index.html" class="back-btn">🏠 الرئيسية</a>
-            <a href="https://t.me/M5M5P" class="tg-link">📢 تليجرام</a>
+            <p style="font-size: 10px; color: #64748b;">الموسيقى تبدأ عند أول نقرة</p>
         </div>
     </div>
 
@@ -92,16 +91,9 @@
 
     function nextQ() {
         cur++;
-        if(cur < data.length) { 
-            load(); 
-            document.getElementById('next').style.display = 'none'; 
-        } else { 
-            document.getElementById('box').innerHTML = `
-                <h1 style="color:var(--success)">اكتمل الفصل الأول</h1>
-                <div style="font-size:40px; margin:20px; color:var(--primary); font-weight:bold;">${score}/${data.length}</div>
-                <button class="btn" style="text-align:center; background:var(--success)" onclick="location.href='ch2.html'">انتقل للفصل الثاني ←</button>
-                <button class="btn" style="text-align:center; background:#475569" onclick="location.href='index.html'">العودة للرئيسية</button>
-            `; 
+        if(cur < data.length) { load(); document.getElementById('next').style.display = 'none'; }
+        else { 
+            document.getElementById('box').innerHTML = `<h2>اكتمل الفصل الأول! النتيجة: ${score}/${data.length}</h2><button class='btn' onclick="location.href='index.html'">العودة للرئيسية</button>`; 
         }
     }
     load();
