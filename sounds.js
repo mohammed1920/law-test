@@ -1,13 +1,24 @@
-// ملف sounds.js المحدث
-const correctSound = new Audio('https://actions.google.com/sounds/v1/cartoon/clink_clanking.ogg');
-const wrongSound = new Audio('https://actions.google.com/sounds/v1/cartoon/boing.ogg');
+// إنشاء كائنات الصوت
+const audioCtx = {
+    correct: new Audio('https://www.soundjay.com/buttons/sounds/button-37.mp3'),
+    wrong: new Audio('https://www.soundjay.com/buttons/sounds/button-10.mp3')
+};
+
+// ضبط الإعدادات لضمان الجاهزية
+Object.values(audioCtx).forEach(sound => {
+    sound.preload = 'auto';
+    sound.load();
+});
 
 function playCorrect() {
-    correctSound.currentTime = 0;
-    correctSound.play().catch(e => console.log("تفاعل مع الصفحة أولاً"));
+    // نطلب من المتصفح تشغيل الصوت ونصفر الوقت لضمان التكرار السريع
+    audioCtx.correct.pause();
+    audioCtx.correct.currentTime = 0;
+    audioCtx.correct.play().catch(err => console.log("تفاعل مع الصفحة أولاً لتفعيل الصوت"));
 }
 
 function playWrong() {
-    wrongSound.currentTime = 0;
-    wrongSound.play().catch(e => console.log("تفاعل مع الصفحة أولاً"));
+    audioCtx.wrong.pause();
+    audioCtx.wrong.currentTime = 0;
+    audioCtx.wrong.play().catch(err => console.log("تفاعل مع الصفحة أولاً لتفعيل الصوت"));
 }
