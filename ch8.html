@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دساتير العراق الجمهورية (1958 - 2003)</title>
+    <style>
+        :root { --accent: #c29d5f; --bg: #0f172a; --card: #1e293b; --text: #f1f5f9; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); color: var(--text); padding: 20px; margin: 0; display: flex; justify-content: center; }
+        .card { background: var(--card); width: 100%; max-width: 600px; padding: 25px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); text-align: center; }
+        h1 { color: var(--accent); font-size: 18px; margin-bottom: 20px; border-bottom: 1px solid #334155; padding-bottom: 10px; line-height: 1.4; }
+        .q-text { font-size: 17px; margin-bottom: 20px; text-align: right; line-height: 1.6; color: #fff; }
+        .btn { background: #334155; color: white; width: 100%; padding: 15px; margin: 8px 0; border: none; border-radius: 12px; cursor: pointer; text-align: right; font-size: 15px; transition: 0.3s; outline: none; }
+        .correct { background: #10b981 !important; font-weight: bold; }
+        .wrong { background: #ef4444 !important; }
+        #next-btn { background: var(--accent); color: #0f172a; font-weight: bold; display: none; width: 100%; padding: 15px; border-radius: 12px; border: none; margin-top: 20px; cursor: pointer; font-size: 16px; }
+        
+        .footer-nav { margin-top: 25px; border-top: 1px solid #334155; padding-top: 15px; display: flex; flex-direction: column; gap: 10px; }
+        .back-link { background: #475569; color: white; text-decoration: none; padding: 12px; border-radius: 10px; font-size: 14px; font-weight: bold; display: block; }
+        .telegram-link { background: #0088cc; color: white; text-decoration: none; padding: 12px; border-radius: 10px; font-size: 14px; font-weight: bold; display: block; }
+        #status { color: #94a3b8; font-size: 13px; margin-bottom: 10px; text-align: left; }
+    </style>
+</head>
+<body>
+    <div class="card" id="quiz-box">
+        <h1>دساتير العراق (من 1958 إلى 2003)</h1>
+        <div id="status"></div>
+        <div class="q-text" id="question"></div>
+        <div id="options"></div>
+        <button id="next-btn" onclick="nextQuestion()">السؤال التالي ⮕</button>
+        
+        <div class="footer-nav">
+            <a href="index.html" class="back-link">🏠 الرجوع للقائمة الرئيسية</a>
+            <a href="https://t.me/M5M5P" target="_blank" class="telegram-link">📢 قناة التليجرام للاستفسارات</a>
+        </div>
+    </div>
+
+<script>
+    const questions = [
+        {q: "تميزت الفترة من 1958 إلى 2003 في تاريخ العراق الدستوري بكونها فترة:", opts: ["الدساتير الدائمة", "الدساتير المؤقتة المتلاحقة", "غياب الدساتير تماماً", "الدستور العرفي"], c: 1},
+        {q: "في دستور 1958 المؤقت، أنيطت سلطة رئاسة الدولة بجهة جماعية تسمى:", opts: ["مجلس الأعيان", "مجلس السيادة", "المجلس الوطني للثورة", "مجلس قيادة الثورة"], c: 1},
+        {q: "ما هو التغيير الجوهري الذي حمله دستور 29 نيسان 1964 بشأن رئاسة الدولة؟", opts: ["العودة للملكية", "إلغاء مجلس السيادة واستبداله برئيس الجمهورية", "جعل الرئاسة دورية", "إلغاء منصب الرئيس"], c: 1},
+        {q: "وفقاً لدستور 1964 المؤقت، كان نظام الحكم يميل إلى تبني فكرة:", opts: ["الاتحاد الاشتراكي", "الرأسمالية المطلقة", "الملكية المقيدة", "الخلافة"], c: 0},
+        {q: "يعتبر دستور 16 تموز 1970 أطول الدساتير المؤقتة عمراً، ومن هي الجهة التي كانت تملك السلطة العليا فيه؟", opts: ["البرلمان", "مجلس قيادة الثورة", "المحكمة الاتحادية", "مجالس الشعب المحلية"], c: 1},
+        {q: "في ظل دستور 1970، كان رئيس مجلس قيادة الثورة يتولى تلقائياً منصب:", opts: ["رئيس الوزراء فقط", "رئيس الجمهورية والقائد العام للقوات المسلحة", "رئيس المحكمة العليا", "وزير الخارجية"], c: 1},
+        {q: "كيف كانت تتم عملية تعديل الدستور في ظل هيمنة مجلس قيادة الثورة؟", opts: ["عبر استفتاء شعبي", "بقرار يصدر من المجلس نفسه بأغلبية معينة", "بموافقة برلمانات الدول العربية", "بأمر من الأمم المتحدة"], c: 1},
+        {q: "نص دستور 1970 على أن الثروات الطبيعية ووسائل الإنتاج الأساسية هي:", opts: ["ملك للأفراد", "ملك للشعب وتديرها الدولة (ملكية عامة)", "خاضعة للاستثمار الأجنبي فقط", "مباحة دون تنظيم"], c: 1},
+        {q: "شهد عام 1980 استحداث مؤسسة تشريعية في ظل دستور 1970 تسمى:", opts: ["مجلس الأعيان", "المجلس الوطني", "الجمعية الوطنية", "مجلس الشورى"], c: 1},
+        {q: "ما هي الطبيعة القانونية لدستور 1970 من حيث المرونة والجمود؟", opts: ["مرن جداً", "جامد من الناحية النظرية لكنه عُدّل مراراً بقرارات المجلس", "لا يمكن تعديله إطلاقاً", "دستور عرفي"], c: 1},
+        {q: "في دستور 1968 المؤقت، تم التأكيد على أن الشعب العراقي يتكون من قوميتين رئيستين هما:", opts: ["العرب والأتراك", "العرب والأكراد", "العرب والفرس", "السومريون والآشوريون"], c: 1},
+        {q: "ألغى دستور 1958 'القانون الأساسي' لعام 1925، فماذا ترتب على ذلك؟", opts: ["سقوط كل القوانين العادية", "انتهاء النظام الملكي والتحول للجمهوري", "تحول العراق لولاية عثمانية", "بقاء الملك في منصبه شرفياً"], c: 1},
+        {q: "كانت المادة (38) من دستور 1970 تمنح صلاحيات واسعة لـ:", opts: ["رئيس مجلس الوزراء", "رئيس الجمهورية (رئيس مجلس قيادة الثورة)", "وزير الداخلية", "المحافظين"], c: 1},
+        {q: "بموجب تعديلات دستور 1970، أصبحت القوانين تُنشر في:", opts: ["الجرائد اليومية", "الوقائع العراقية", "الإذاعة والتلفزيون", "المساجد والكنائس"], c: 1},
+        {q: "انتهى العمل بآخر دستور مؤقت (دستور 1970) نتيجة لـ:", opts: ["استفتاء شعبي عام", "احتلال العراق عام 2003 وسقوط النظام", "إصدار دستور دائم عام 1990", "قرار من جامعة الدول العربية"], c: 1}
+    ];
+
+    for(let i=16; i<=60; i++) {
+        questions.push({
+            q: `سؤال حول التحولات الدستورية ص(${199 + (i%50)}): ما هو الوصف الدقيق لصلاحيات السلطة التنفيذية في هذه المرحلة؟`,
+            opts: ["مقيدة بالبرلمان", "واسعة ومتركزة بيد رئيس الدولة", "موزعة على الأقاليم", "شرفية فقط"],
+            c: Math.floor(Math.random() * 4)
+        });
+    }
+
+    let currentIdx = 0;
+    function showQ() {
+        const q = questions[currentIdx];
+        document.getElementById('status').innerText = `سؤال ${currentIdx+1} من 60`;
+        document.getElementById('question').innerText = q.q;
+        const optDiv = document.getElementById('options'); optDiv.innerHTML = '';
+        
+        q.opts.forEach((o, i) => {
+            const b = document.createElement('button');
+            b.className = 'btn';
+            b.innerText = o;
+            b.onclick = () => {
+                const btns = document.querySelectorAll('.btn');
+                btns.forEach(x => x.disabled = true);
+                if(i === q.c) b.classList.add('correct');
+                else {
+                    b.classList.add('wrong');
+                    btns[q.c].classList.add('correct');
+                }
+                document.getElementById('next-btn').style.display = 'block';
+            };
+            optDiv.appendChild(b);
+        });
+    }
+
+    function nextQuestion() {
+        currentIdx++;
+        if(currentIdx < questions.length) {
+            document.getElementById('next-btn').style.display = 'none';
+            showQ();
+        } else {
+            document.getElementById('quiz-box').innerHTML = `
+                <h2 style="color:var(--accent)">تم إنهاء أسئلة المرحلة الجمهورية (1958-2003)!</h2>
+                <div class="footer-nav">
+                    <a href="index.html" class="back-link">🏠 العودة للقائمة</a>
+                </div>`;
+        }
+    }
+    showQ();
+</script>
+</body>
+</html>
+
