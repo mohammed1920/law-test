@@ -1,39 +1,21 @@
-// المحرك الصوتي المطور: موسيقى + تفاعل
-const audioManager = {
-    bgMusic: new Audio('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3'), // موسيقى هادئة
-    correct: new Audio('https://actions.google.com/sounds/v1/cartoon/clink_clanking.ogg'),
-    wrong: new Audio('https://actions.google.com/sounds/v1/cartoon/boing.ogg'),
-    isInitialized: false
-};
+// موسيقى الخلفية
+const bgMusic = new Audio('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3');
+bgMusic.loop = true;
+bgMusic.volume = 0.3;
 
-// إعدادات الموسيقى الخلفية
-audioManager.bgMusic.loop = true; // تكرار مستمر
-audioManager.bgMusic.volume = 0.2; // خفض الصوت ليكون هادئاً ولا يغطي على تفكير الطالب
+// تشغيل الموسيقى عند أول نقرة
+document.addEventListener('click', () => {
+    bgMusic.play().catch(() => {});
+}, { once: true });
 
-function initAllSounds() {
-    if (audioManager.isInitialized) return;
-    
-    // تشغيل الموسيقى الخلفية
-    audioManager.bgMusic.play().catch(e => console.log("بانتظار التفاعل لبدء الموسيقى"));
-    
-    // تجهيز أصوات التفاعل
-    audioManager.correct.load();
-    audioManager.wrong.load();
-    
-    audioManager.isInitialized = true;
-    console.log("تم تفعيل الموسيقى والنظام الصوتي");
-}
-
-// تشغيل عند أول نقرة في أي مكان
-document.addEventListener('click', initAllSounds, { once: true });
-document.addEventListener('touchstart', initAllSounds, { once: true });
-
+// دالة الصوت الصحيح
 function playCorrect() {
-    audioManager.correct.currentTime = 0;
-    audioManager.correct.play();
+    const sound = new Audio('https://www.myinstants.com/media/sounds/correct.mp3');
+    sound.play();
 }
 
+// دالة الصوت الخاطئ
 function playWrong() {
-    audioManager.wrong.currentTime = 0;
-    audioManager.wrong.play();
+    const sound = new Audio('https://www.myinstants.com/media/sounds/wrong.mp3');
+    sound.play();
 }
