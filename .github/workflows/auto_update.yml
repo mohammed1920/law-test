@@ -6,6 +6,7 @@ on:
       - رئيسي
     paths:
       - 'ch*.html'
+      - 'update_index.py'  # صار يشتغل حتى لو غيرت التصميم بالسكربت
 
 jobs:
   build:
@@ -27,5 +28,5 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add index.html
-          git commit -m "تحديث الفهرس أوتوماتيكياً" || exit 0
+          git commit -m "تحديث التصميم والفهرس أوتوماتيكياً" || exit 0
           git push
