@@ -1,50 +1,33 @@
-// 1. تعريف جميع الأصوات
-const sounds = {
-    bg: new Audio('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3'),
-    correct: new Audio('https://actions.google.com/sounds/v1/cartoon/clink_clanking.ogg'),
-    wrong: new Audio('https://actions.google.com/sounds/v1/cartoon/boing.ogg')
+// 1. تعريف الأصوات (استخدمت لك روابط موثوقة جداً من جوجل)
+const bgMusic = new Audio('https://actions.google.com/sounds/v1/weather/rain_on_roof.ogg'); // موسيقى مطر هادئة جداً
+const correctSound = new Audio('https://actions.google.com/sounds/v1/cartoon/clink_clanking.ogg');
+const wrongSound = new Audio('https://actions.google.com/sounds/v1/cartoon/boing.ogg');
+
+// إعدادات الموسيقى
+bgMusic.loop = true;
+bgMusic.volume = 0.1; 
+
+// 2. دالة "الإيقاظ" الإجبارية
+function startAudioSystem() {
+    // تشغيل الكل صامت لفتح القفل
+    [bgMusic, correctSound, wrongSound].forEach(s => {
+        s.play().then(() => {
+            if (s !== bgMusic) { s.pause(); s.currentTime = 0; }
+        }).catch(e => console.log("بانتظار اللمسة الأولى"));
+    });
+}
+
+// تفعيل عند أول لمسة للشاشة
+document.addEventListener('click', startAudioSystem, { once: true });
+document.addEventListener('touchstart', startAudioSystem, { once: true });
+
+// 3. الدوال التي تطلبها ملفات الـ HTML
+window.playCorrect = function() {
+    correctSound.currentTime = 0;
+    correctSound.play();
 };
 
-// 2. إعدادات الصوت
-sounds.bg.loop = true;
-sounds.bg.volume = 0.2;
-
-// 3. دالة "الإيقاظ الشامل" (تفعيل كل المسارات الصوتية بنقرة واحدة)
-function setupAudio() {
-    // تشغيل الموسيقى
-    sounds.bg.play().catch(() => {});
-    
-    // تشغيل أصوات التفاعل صامتة للحظة ثم إيقافها (لفتح قفل المتصفح)
-    sounds.correct.muted = true;
-    sounds.correct.play().then(() => {
-        sounds.correct.pause();
-        sounds.correct.muted = false;
-        sounds.correct.currentTime = 0;
-    }).catch(() => {});
-
-    sounds.wrong.muted = true;
-    sounds.wrong.play().then(() => {
-        sounds.wrong.pause();
-        sounds.wrong.muted = false;
-        sounds.wrong.currentTime = 0;
-    }).catch(() => {});
-}
-
-// تفعيل النظام عند أول لمسة
-document.addEventListener('click', setupAudio, { once: true });
-document.addEventListener('touchstart', setupAudio, { once: true });
-
-// 4. الدوال التي تناديها ملفات الـ HTML
-function playCorrect() {
-    if (sounds.correct) {
-        sounds.correct.currentTime = 0;
-        sounds.correct.play().catch(e => console.log("خطأ صوت الصح"));
-    }
-}
-
-function playWrong() {
-    if (sounds.wrong) {
-        sounds.wrong.currentTime = 0;
-        sounds.wrong.play().catch(e => console.log("خطأ صوت الخطأ"));
-    }
-}
+window.playWrong = function() {
+    wrongSound.currentTime = 0;
+    wrongSound.play();
+};
