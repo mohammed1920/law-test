@@ -1,17 +1,13 @@
-// ملف المحرك الصوتي الموحد لجميع الفصول
-const audioCtx = {
-    correct: new Audio('https://www.soundjay.com/buttons/sounds/button-37.mp3'),
-    wrong: new Audio('https://www.soundjay.com/buttons/sounds/button-10.mp3')
-};
+// ملف sounds.js المحدث
+const correctSound = new Audio('https://actions.google.com/sounds/v1/cartoon/clink_clanking.ogg');
+const wrongSound = new Audio('https://actions.google.com/sounds/v1/cartoon/boing.ogg');
 
-// دالة استدعاء الصوت
 function playCorrect() {
-    audioCtx.correct.currentTime = 0;
-    audioCtx.correct.play().catch(e => console.log("الصوت مفعل بعد أول نقرة"));
+    correctSound.currentTime = 0;
+    correctSound.play().catch(e => console.log("تفاعل مع الصفحة أولاً"));
 }
 
 function playWrong() {
-    audioCtx.wrong.currentTime = 0;
-    audioCtx.wrong.play().catch(e => console.log("الصوت مفعل بعد أول نقرة"));
+    wrongSound.currentTime = 0;
+    wrongSound.play().catch(e => console.log("تفاعل مع الصفحة أولاً"));
 }
-
