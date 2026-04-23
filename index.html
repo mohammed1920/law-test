@@ -6,102 +6,75 @@
     <title>اختبار القانون الدستوري | التحدي الرقمي</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;900&family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary: #c29d5f; /* لون ذهبي قانوني */
-            --bg: #0f172a;
-            --card: #1e293b;
-            --text: #f1f5f9;
-            --success: #10b981;
-            --error: #ef4444;
-        }
-
+        :root { --primary: #c29d5f; --bg: #0f172a; --card: #1e293b; --text: #f1f5f9; --success: #10b981; --error: #ef4444; }
         * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        body {
-            font-family: 'Tajawal', sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            padding: 15px;
-        }
-
-        .quiz-container {
-            width: 100%;
-            max-width: 550px;
-            background: var(--card);
-            padding: 30px;
-            border-radius: 20px;
-            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
-            border: 1px solid rgba(255,255,255,0.05);
-            position: relative;
-            overflow: hidden;
-        }
-
-        /* خط زخرفي علوي */
-        .quiz-container::before {
-            content: ""; position: absolute; top: 0; left: 0; right: 0;
-            height: 5px; background: linear-gradient(90deg, var(--primary), #eab308);
-        }
-
+        body { font-family: 'Tajawal', sans-serif; background-color: var(--bg); color: var(--text); display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 15px; }
+        .quiz-container { width: 100%; max-width: 550px; background: var(--card); padding: 30px; border-radius: 20px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.05); position: relative; overflow: hidden; }
+        .quiz-container::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 5px; background: linear-gradient(90deg, var(--primary), #eab308); }
         header { text-align: center; margin-bottom: 30px; }
         h1 { font-family: 'Cairo', sans-serif; font-size: 22px; color: var(--primary); margin-bottom: 5px; }
         .progress-text { font-size: 13px; color: #94a3b8; }
-
-        .question-section { margin-bottom: 20px; }
         #question { font-size: 18px; font-weight: 700; line-height: 1.6; margin-bottom: 20px; }
-
         .options-list { display: flex; flex-direction: column; gap: 12px; }
-
-        .opt-btn {
-            background: #334155;
-            border: 2px solid transparent;
-            padding: 16px;
-            border-radius: 12px;
-            color: var(--text);
-            font-family: inherit;
-            font-size: 15px;
-            text-align: right;
-            cursor: pointer;
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .opt-btn:hover:not(:disabled) {
-            background: #475569;
-            transform: translateX(-5px);
-            border-color: var(--primary);
-        }
-
+        .opt-btn { background: #334155; border: 2px solid transparent; padding: 16px; border-radius: 12px; color: var(--text); font-family: inherit; font-size: 15px; text-align: right; cursor: pointer; transition: 0.2s; }
+        .opt-btn:hover:not(:disabled) { background: #475569; transform: translateX(-5px); border-color: var(--primary); }
         .opt-btn.correct { background: rgba(16, 185, 129, 0.2); border-color: var(--success); color: #d1fae5; }
         .opt-btn.wrong { background: rgba(239, 68, 68, 0.2); border-color: var(--error); color: #fee2e2; }
-
-        #feedback {
-            margin-top: 20px; padding: 15px; border-radius: 10px;
-            background: rgba(194, 157, 95, 0.1);
-            font-size: 14px; border-right: 4px solid var(--primary);
-            display: none; animation: fadeIn 0.4s;
-        }
-
-        .next-btn {
-            width: 100%; margin-top: 20px; padding: 15px; border: none;
-            border-radius: 12px; background: var(--primary); color: #0f172a;
-            font-weight: 900; font-family: 'Cairo', sans-serif; font-size: 16px;
-            cursor: pointer; display: none; transition: 0.2s;
-        }
-
-        .next-btn:hover { background: #d4af72; transform: translateY(-2px); }
-
+        .telegram-link { display: block; margin: 20px 0; text-align: center; color: #38bdf8; text-decoration: none; font-size: 14px; font-weight: bold; padding: 10px; border: 1px dashed #38bdf8; border-radius: 8px; }
+        .next-btn { width: 100%; margin-top: 10px; padding: 15px; border: none; border-radius: 12px; background: var(--primary); color: #0f172a; font-weight: 900; font-family: 'Cairo', sans-serif; font-size: 16px; cursor: pointer; display: none; }
         .result-screen { text-align: center; display: none; }
         .result-screen .score { font-size: 48px; font-weight: 900; color: var(--primary); margin: 20px 0; }
-
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        
-        /* للهواتف */
-        @media (max-width: 480px) {
-            .quiz-container { padding: 20px; }
-            h1 { font-size: 18px; }
+    </style>
+</head>
+<body>
+<div class="quiz-container">
+    <div id="quiz-box">
+        <header><h1>اختبار القانون الدستوري</h1><p class="progress-text" id="progress-text"></p></header>
+        <div class="question-section"><h2 id="question"></h2></div>
+        <div class="options-list" id="options"></div>
+        <a href="https://t.me/M5M5P" target="_blank" class="telegram-link">📢 تابع قناتنا للمزيد: M5M5P@</a>
+        <button class="next-btn" id="next-btn" onclick="handleNext()">السؤال التالي ←</button>
+    </div>
+    <div class="result-screen" id="result-screen">
+        <h1>النتيجة النهائية</h1>
+        <div class="score" id="final-score"></div>
+        <p id="result-message"></p>
+        <a href="https://t.me/M5M5P" target="_blank" class="telegram-link">📢 انضم للقناة الآن</a>
+        <button class="next-btn" style="display:block" onclick="location.reload()">🔄 إعادة الاختبار</button>
+    </div>
+</div>
+<script>
+    const questions = [
+        { q: "أي المعايير التالية يعتمد على تدوين القواعد في وثيقة رسمية بغض النظر عن مضمونها؟", opts: ["المعيار الموضوعي", "المعيار الشكلي", "المعيار العرفي", "المعيار الفقهي"], c: 1 },
+        { q: "تعتبر بريطانيا النموذج الأبرز لـ:", opts: ["الدساتير الجامدة", "الدساتير المكتوبة", "الدساتير العرفية", "الدساتير الممنوحة"], c: 2 },
+        { q: "ما هو الركن الذي يمثل النطاق الجغرافي لسيادة الدولة؟", opts: ["الشعب", "السلطة السياسية", "الإقليم", "الاعتراف الدولي"], c: 2 },
+        { q: "الدستور الذي يتطلب تعديله إجراءات أشد من تعديل القانون العادي هو:", opts: ["الدستور المرن", "الدستور الجامد", "الدستور المؤقت", "القانون الأساسي"], c: 1 }
+    ];
+    let cur = 0, score = 0;
+    function load() {
+        const qD = questions[cur];
+        document.getElementById('question').innerText = qD.q;
+        document.getElementById('progress-text').innerText = `السؤال ${cur + 1} من ${questions.length}`;
+        const div = document.getElementById('options'); div.innerHTML = '';
+        qD.opts.forEach((o, i) => {
+            const b = document.createElement('button'); b.className = 'opt-btn'; b.innerText = o;
+            b.onclick = () => {
+                const btns = document.querySelectorAll('.opt-btn'); btns.forEach(x => x.disabled = true);
+                if(i === qD.c) { b.classList.add('correct'); score++; }
+                else { b.classList.add('wrong'); btns[qD.c].classList.add('correct'); }
+                document.getElementById('next-btn').style.display = 'block';
+            };
+            div.appendChild(b);
+        });
+    }
+    function handleNext() {
+        cur++; if(cur < questions.length) { load(); document.getElementById('next-btn').style.display = 'none'; }
+        else { document.getElementById('quiz-box').style.display='none'; document.getElementById('result-screen').style.display='block'; document.getElementById('final-score').innerText = `${score} / ${questions.length}`; }
+    }
+    load();
+</script>
+</body>
+</html>
             .opt-btn { padding: 12px; font-size: 14px; }
         }
     </style>
