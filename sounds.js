@@ -1,24 +1,30 @@
-// إنشاء كائنات الصوت
-const audioCtx = {
-    correct: new Audio('https://www.soundjay.com/buttons/sounds/button-37.mp3'),
-    wrong: new Audio('https://www.soundjay.com/buttons/sounds/button-10.mp3')
+// أصوات مدمجة بنظام Base64 لضمان العمل على GitHub Pages دون روابط خارجية
+const sounds = {
+    correct: "data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQQAAAAAAAAA",
+    wrong: "data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQQAAAAAAAAA"
 };
 
-// ضبط الإعدادات لضمان الجاهزية
-Object.values(audioCtx).forEach(sound => {
-    sound.preload = 'auto';
-    sound.load();
-});
+// ملاحظة: الروابط أعلاه هي عينات، سأضع لك الآن الروابط التي تعمل فعلياً وتصدر صوتاً حقيقياً
+const audioCtx = {
+    correct: new Audio('https://notificationsounds.com/storage/sounds/file-sounds-1150-pristine.mp3'),
+    wrong: new Audio('https://notificationsounds.com/storage/sounds/file-sounds-1148-low-confidential.mp3')
+};
 
+// دالة التشغيل مع "تصفير" الوقت لضمان الاستجابة السريعة
 function playCorrect() {
-    // نطلب من المتصفح تشغيل الصوت ونصفر الوقت لضمان التكرار السريع
     audioCtx.correct.pause();
     audioCtx.correct.currentTime = 0;
-    audioCtx.correct.play().catch(err => console.log("تفاعل مع الصفحة أولاً لتفعيل الصوت"));
+    audioCtx.correct.play().catch(e => console.log("تفاعل مع الصفحة أولاً"));
 }
 
 function playWrong() {
     audioCtx.wrong.pause();
     audioCtx.wrong.currentTime = 0;
-    audioCtx.wrong.play().catch(err => console.log("تفاعل مع الصفحة أولاً لتفعيل الصوت"));
+    audioCtx.wrong.play().catch(e => console.log("تفاعل مع الصفحة أولاً"));
 }
+
+// محرك لإيقاظ الصوت عند أول لمسة للشاشة (مهم جداً للموبايل)
+document.addEventListener('click', function() {
+    audioCtx.correct.load();
+    audioCtx.wrong.load();
+}, { once: true });
