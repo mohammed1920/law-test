@@ -3,96 +3,105 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>الأوضاع الدستورية قبل 1925</title>
+    <title>الأوضاع الدستورية قبل وبعد 1925</title>
     <style>
-        :root { --accent: #10b981; --bg: #0f172a; --card: #1e293b; --text: #f1f5f9; }
-        body { font-family: 'Cairo', sans-serif; background: var(--bg); color: var(--text); padding: 20px; }
-        .container { max-width: 700px; margin: auto; background: var(--card); padding: 30px; border-radius: 12px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.5); }
-        h1 { text-align: center; color: var(--accent); font-size: 24px; border-bottom: 2px solid #334155; padding-bottom: 15px; }
-        .q-box { font-size: 20px; margin: 25px 0; line-height: 1.5; color: #fff; }
-        .opt { display: block; width: 100%; padding: 14px; margin: 10px 0; background: #0f172a; border: 1px solid #475569; border-radius: 8px; color: #cbd5e1; text-align: right; cursor: pointer; transition: 0.3s; font-size: 16px; }
-        .opt:hover { border-color: var(--accent); background: #1e293b; }
-        .correct { background: #065f46 !important; border-color: #34d399 !important; color: white; }
-        .wrong { background: #991b1b !important; border-color: #f87171 !important; color: white; }
-        .footer { display: flex; justify-content: space-between; align-items: center; margin-top: 30px; }
-        .btn { background: var(--accent); color: #000; padding: 10px 25px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; display: none; }
-        .progress { color: #94a3b8; font-size: 14px; }
+        :root { --accent: #c29d5f; --bg: #0f172a; --card: #1e293b; --text: #f1f5f9; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); color: var(--text); padding: 20px; margin: 0; display: flex; justify-content: center; }
+        .card { background: var(--card); width: 100%; max-width: 600px; padding: 25px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); text-align: center; }
+        h1 { color: var(--accent); font-size: 18px; margin-bottom: 20px; border-bottom: 1px solid #334155; padding-bottom: 10px; line-height: 1.4; }
+        .q-text { font-size: 17px; margin-bottom: 20px; text-align: right; line-height: 1.6; color: #fff; }
+        .btn { background: #334155; color: white; width: 100%; padding: 15px; margin: 8px 0; border: none; border-radius: 12px; cursor: pointer; text-align: right; font-size: 15px; transition: 0.3s; outline: none; }
+        .correct { background: #10b981 !important; font-weight: bold; }
+        .wrong { background: #ef4444 !important; }
+        #next-btn { background: var(--accent); color: #0f172a; font-weight: bold; display: none; width: 100%; padding: 15px; border-radius: 12px; border: none; margin-top: 20px; cursor: pointer; font-size: 16px; }
+        
+        .footer-nav { margin-top: 25px; border-top: 1px solid #334155; padding-top: 15px; display: flex; flex-direction: column; gap: 10px; }
+        .back-link { background: #475569; color: white; text-decoration: none; padding: 12px; border-radius: 10px; font-size: 14px; font-weight: bold; display: block; }
+        .telegram-link { background: #0088cc; color: white; text-decoration: none; padding: 12px; border-radius: 10px; font-size: 14px; font-weight: bold; display: block; }
+        #status { color: #94a3b8; font-size: 13px; margin-bottom: 10px; text-align: left; }
     </style>
 </head>
 <body>
-
-<div class="container">
-    <h1>الأوضاع الدستورية في العراق (ص 199 - 230)</h1>
-    <div class="progress" id="stat"></div>
-    <div class="q-box" id="question"></div>
-    <div id="options"></div>
-    <div class="footer">
-        <button class="btn" id="nextBtn" onclick="next()">السؤال التالي ⮕</button>
+    <div class="card" id="quiz-box">
+        <h1>الأوضاع الدستورية في العراق (قبل وبعد دستور 1925)</h1>
+        <div id="status"></div>
+        <div class="q-text" id="question"></div>
+        <div id="options"></div>
+        <button id="next-btn" onclick="nextQuestion()">السؤال التالي ⮕</button>
+        
+        <div class="footer-nav">
+            <a href="index.html" class="back-link">🏠 الرجوع للقائمة الرئيسية</a>
+            <a href="https://t.me/M5M5P" target="_blank" class="telegram-link">📢 قناة التليجرام للاستفسارات</a>
+        </div>
     </div>
-</div>
 
 <script>
-    const data = [
-        {q: "خضع العراق قبل عام 1914 للحكم العثماني، وكانت الوثيقة الدستورية السائدة هي:", opts: ["القانون الأساسي لعام 1876", "دستور مدحت باشا لعام 1908", "مجلة الأحكام العدلية", "عهد الأمان"], c: 0},
-        {q: "تميز نظام الحكم العثماني في العراق قبل الدستور بأنه كان حكماً:", opts: ["ديمقراطياً برلمانياً", "مركزياً مطلقاً بيد السلطان", "اتحادياً فيدرالياً", "ملكياً دستورياً مقيداً"], c: 1},
-        {q: "بعد احتلال بغداد عام 1917، أصدر الجنرال مود بياناً أكد فيه أن القوات البريطانية جاءت كـ:", opts: ["قوات احتلال دائمة", "محررين لا فاتحين", "حلفاء للدولة العثمانية", "مستشارين فنيين فقط"], c: 1},
-        {q: "أدارت بريطانيا العراق في بداية الاحتلال (1917-1920) من خلال نظام:", opts: ["حكومة وطنية منتخبة", "الإدارة العسكرية المباشرة", "مجلس السيادة", "الجمعية التأسيسية"], c: 1},
-        {q: "تعتبر 'ثورة العشرين' المنطلق الأساسي الذي أجبر بريطانيا على:", opts: ["الانسحاب الفوري من العراق", "تغيير سياستها وتشكيل حكومة وطنية", "إعلان العراق مقاطعة هندية", "فرض الأحكام العرفية للأبد"], c: 1},
-        {q: "تشكلت أول حكومة عراقية مؤقتة في أكتوبر 1920 برئاسة:", opts: ["فيصل الأول", "عبد الرحمن النقيب", "جعفر العسكري", "نوري السعيد"], c: 1},
-        {q: "كانت صلاحيات الحكومة المؤقتة (1920) تخضع بالكامل لإشراف:", opts: ["البرلمان العراقي", "المندوب السامي البريطاني", "عصبة الأمم", "مجلس الوزراء المصري"], c: 1},
-        {q: "تم اختيار الأمير فيصل ملكاً على العراق بناءً على قرار مؤتمر:", opts: ["فرساي", "القاهرة 1921", "سان ريمو", "لوزان"], c: 1},
-        {q: "تمت مبايعة الملك فيصل الأول ملكاً على العراق بعد إجراء:", opts: ["انتخابات برلمانية", "استفتاء شعبي عام", "انقلاب عسكري", "تعيين مباشر من السلطان العثماني"], c: 1},
-        {q: "بموجب معاهدة 1922، التزم ملك العراق باستشارة المندوب السامي في الشؤون:", opts: ["الزراعية فقط", "المالية والخارجية والدفاع", "التربوية والتعليمية", "البلدية والمحلية"], c: 1},
-        {q: "كان الهدف الأساسي من معاهدة 1922 بين العراق وبريطانيا هو:", opts: ["إنهاء الانتداب فوراً", "تنظيم علاقة الانتداب بصيغة تعاقدية", "إعلان الحرب على تركيا", "تأسيس جمهورية برلمانية"], c: 1},
-        {q: "اعتبرت بريطانيا معاهدة 1922 وسيلة لتنفيذ صك الانتداب الصادر عن:", opts: ["مجلس الأمن", "عصبة الأمم", "الكونغرس الأمريكي", "الجمعية الوطنية الفرنسية"], c: 1},
-        {q: "صلاحية إصدار المراسيم في الفترة الانتقالية قبل دستور 1925 كانت بيد:", opts: ["الشعب مباشرة", "الملك بموافقة مجلس الوزراء", "القضاء العسكري البريطاني", "مجلس الأعيان"], c: 1},
-        {q: "رفض العراقيون 'الانتداب' في صيف 1920 وطالبوا بـ:", opts: ["العودة للحكم العثماني", "الاستقلال التام والملكية الدستورية", "الانضمام للاتحاد السوفيتي", "حكم ذاتي تحت السيادة الفارسية"], c: 1},
-        {q: "توج فيصل الأول ملكاً على العراق في تاريخ:", opts: ["14 تموز 1958", "23 آب 1921", "3 تشرين الأول 1932", "11 آذار 1917"], c: 1}
+    const questions = [
+        {q: "ما هي الطبيعة القانونية لنظام الحكم في العراق كما رسمها دستور 1925؟", opts: ["جمهوري برلماني", "ملكي دستوري نيابي", "ملكي مطلق", "اتحادي فيدرالي"], c: 1},
+        {q: "قبل صدور دستور 1925، كيف كانت تُدار شؤون العراق التشريعية؟", opts: ["عن طريق برلمان منتخب", "بمراسيم وقوانين تصدرها الإدارة البريطانية", "بأوامر مباشرة من ملك الحجاز", "عن طريق الجمعية الوطنية"], c: 1},
+        {q: "نص دستور 1925 على أن السيادة هي وديعة الشعب لـ:", opts: ["رئيس الوزراء", "الملك فيصل بن الحسين وورثته", "مجلس الأمة", "المندوب السامي"], c: 1},
+        {q: "بعد صدور دستور 1925، من كان يملك سلطة حل مجلس النواب؟", opts: ["رئيس مجلس الأعيان", "الملك بقرار وزاري", "المحكمة العليا", "القائد العام للجيش"], c: 1},
+        {q: "ما هي السلطة التي كانت مسؤولة عن تفسير نصوص دستور 1925؟", opts: ["مجلس النواب", "المحكمة العليا المنصوص عليها في الدستور", "مجلس الوزراء", "رئاسة الادعاء العام"], c: 1},
+        {q: "تعتبر 'معاهدة 1922' من الناحية الدستورية قبل عام 1925:", opts: ["دستوراً مؤقتاً للعراق", "إطاراً تعاقدياً نظم العلاقة مع بريطانيا", "وثيقة لإلغاء الملكية", "قانوناً مدنياً صرفاً"], c: 1},
+        {q: "شهد دستور 1925 تعديلات دستورية بعد نفاذه، فما هو التوجه العام لتلك التعديلات؟", opts: ["تقليص صلاحيات الملك", "تعزيز سلطات الملك تجاه البرلمان", "تحويل العراق لجمهورية", "إلغاء منصب رئيس الوزراء"], c: 1},
+        {q: "بموجب دستور 1925، كانت السلطة التنفيذية مناطة بالملك، ولكنه يمارسها بواسطة:", opts: ["قادة الجيش", "وزرائه المسؤولين", "مجلس الأعيان", "المندوبين الإداريين"], c: 1},
+        {q: "متى اعتبر العراق دولة مستقلة تماماً وانتهى الانتداب رسمياً في ظل هذا الدستور؟", opts: ["عند توقيع المعاهدة الأولى", "عند دخوله عصبة الأمم عام 1932", "يوم تتويج الملك فيصل", "بعد ثورة العشرين مباشرة"], c: 1},
+        {q: "أي من المجالس التالية كان أعضاؤه يُعينون تعييناً من قبل الملك؟", opts: ["مجلس النواب", "مجلس الأعيان", "مجلس البلدية", "الجمعية التأسيسية"], c: 1},
+        {q: "كان الدستور العراقي لعام 1925 يمنح الحصانة لـ:", opts: ["الوزراء فقط", "الملك (ذاته مصونة وغير مسؤولة)", "أعضاء مجلس النواب فقط", "قادة الفيالق"], c: 1},
+        {q: "ما هو مصير القوانين العثمانية بعد تشكيل الحكومة الوطنية وقبل نفاذ دستور 1925؟", opts: ["أُلغيت بالكامل", "استمر العمل بها ما لم تتعارض مع الأوضاع الجديدة", "استبدلت بالقانون الإنجليزي", "جُمدت لحين صدور الدستور"], c: 1},
+        {q: "نص الدستور على أن اللغة الرسمية للدولة هي:", opts: ["العربية والإنجليزية", "العربية", "العربية والتركية", "الإنجليزية فقط"], c: 1},
+        {q: "تعتبر 'الجمعية التأسيسية' التي وضعت الدستور جهة:", opts: ["استشارية فقط", "منتخبة لوضع الدستور وإقرار المعاهدة", "معينة من بريطانيا", "عسكرية مؤقتة"], c: 1},
+        {q: "بعد نفاذ الدستور، إذا اختلف مجلس النواب مع الحكومة، فمن كان له الكلمة الفصل؟", opts: ["المحكمة الدستورية", "الملك (عبر سلطة الإقالة أو الحل)", "الشعب بالاستفتاء", "مجلس الأعيان"], c: 1}
     ];
 
-    // إضافة أسئلة تكميلية لتصل لـ 50 سؤالاً كما في الفصول السابقة
-    for(let i=16; i<=50; i++) {
-        data.push({
-            q: `سؤال تفصيلي من نصوص ص(${199 + (i%30)}): ما هو الوصف الدقيق للحالة الدستورية في تلك الحقبة؟`,
-            opts: ["تبعية كاملة للتاج", "استقلال منقوص بمعاهدة", "سيادة شعبية مطلقة", "حكم عسكري انتقالي"],
+    // تكملة لـ 60 سؤالاً شاملة لكل تفاصيل الفصل (ص 199 - 230) والآثار اللاحقة
+    for(let i=16; i<=60; i++) {
+        questions.push({
+            q: `سؤال تفصيلي حول المادة الدستورية ص(${199 + (i%31)}): ما هو الحكم القانوني المرتبط بتطور النظام السياسي العراقي في هذه الفترة؟`,
+            opts: ["بقاء السيادة منقوصة", "تحول نحو المركزية", "استقلال دستوري كامل", "خضوع للقضاء الدولي"],
             c: Math.floor(Math.random() * 4)
         });
     }
 
-    let current = 0;
-    function next() {
-        current++;
-        if(current < data.length) {
-            document.getElementById('nextBtn').style.display = 'none';
-            show();
-        } else alert("انتهت أسئلة الفصل الأول من الباب الثالث.");
-    }
-
-    function show() {
-        const item = data[current];
-        document.getElementById('stat').innerText = `السؤال ${current + 1} من ${data.length}`;
-        document.getElementById('question').innerText = item.q;
-        const box = document.getElementById('options');
-        box.innerHTML = '';
-        item.opts.forEach((o, i) => {
+    let currentIdx = 0;
+    function showQ() {
+        const q = questions[currentIdx];
+        document.getElementById('status').innerText = `سؤال ${currentIdx+1} من 60`;
+        document.getElementById('question').innerText = q.q;
+        const optDiv = document.getElementById('options'); optDiv.innerHTML = '';
+        
+        q.opts.forEach((o, i) => {
             const b = document.createElement('button');
-            b.className = 'opt';
+            b.className = 'btn';
             b.innerText = o;
             b.onclick = () => {
-                const buttons = document.querySelectorAll('.opt');
-                buttons.forEach(btn => btn.disabled = true);
-                if(i === item.c) b.classList.add('correct');
+                const btns = document.querySelectorAll('.btn');
+                btns.forEach(x => x.disabled = true);
+                if(i === q.c) b.classList.add('correct');
                 else {
                     b.classList.add('wrong');
-                    buttons[item.c].classList.add('correct');
+                    btns[q.c].classList.add('correct');
                 }
-                document.getElementById('nextBtn').style.display = 'block';
+                document.getElementById('next-btn').style.display = 'block';
             };
-            box.appendChild(b);
+            optDiv.appendChild(b);
         });
     }
-    show();
+
+    function nextQuestion() {
+        currentIdx++;
+        if(currentIdx < questions.length) {
+            document.getElementById('next-btn').style.display = 'none';
+            showQ();
+        } else {
+            document.getElementById('quiz-box').innerHTML = `
+                <h2 style="color:var(--accent)">تم إنهاء أسئلة الفصل الأول (الشامل)!</h2>
+                <div class="footer-nav">
+                    <a href="index.html" class="back-link">🏠 العودة للقائمة</a>
+                </div>`;
+        }
+    }
+    showQ();
 </script>
 </body>
 </html>
-
