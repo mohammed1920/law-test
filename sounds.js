@@ -1,30 +1,39 @@
-// أصوات مدمجة بنظام Base64 لضمان العمل على GitHub Pages دون روابط خارجية
-const sounds = {
-    correct: "data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQQAAAAAAAAA",
-    wrong: "data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQQAAAAAAAAA"
+// المحرك الصوتي المطور: موسيقى + تفاعل
+const audioManager = {
+    bgMusic: new Audio('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3'), // موسيقى هادئة
+    correct: new Audio('https://actions.google.com/sounds/v1/cartoon/clink_clanking.ogg'),
+    wrong: new Audio('https://actions.google.com/sounds/v1/cartoon/boing.ogg'),
+    isInitialized: false
 };
 
-// ملاحظة: الروابط أعلاه هي عينات، سأضع لك الآن الروابط التي تعمل فعلياً وتصدر صوتاً حقيقياً
-const audioCtx = {
-    correct: new Audio('https://notificationsounds.com/storage/sounds/file-sounds-1150-pristine.mp3'),
-    wrong: new Audio('https://notificationsounds.com/storage/sounds/file-sounds-1148-low-confidential.mp3')
-};
+// إعدادات الموسيقى الخلفية
+audioManager.bgMusic.loop = true; // تكرار مستمر
+audioManager.bgMusic.volume = 0.2; // خفض الصوت ليكون هادئاً ولا يغطي على تفكير الطالب
 
-// دالة التشغيل مع "تصفير" الوقت لضمان الاستجابة السريعة
+function initAllSounds() {
+    if (audioManager.isInitialized) return;
+    
+    // تشغيل الموسيقى الخلفية
+    audioManager.bgMusic.play().catch(e => console.log("بانتظار التفاعل لبدء الموسيقى"));
+    
+    // تجهيز أصوات التفاعل
+    audioManager.correct.load();
+    audioManager.wrong.load();
+    
+    audioManager.isInitialized = true;
+    console.log("تم تفعيل الموسيقى والنظام الصوتي");
+}
+
+// تشغيل عند أول نقرة في أي مكان
+document.addEventListener('click', initAllSounds, { once: true });
+document.addEventListener('touchstart', initAllSounds, { once: true });
+
 function playCorrect() {
-    audioCtx.correct.pause();
-    audioCtx.correct.currentTime = 0;
-    audioCtx.correct.play().catch(e => console.log("تفاعل مع الصفحة أولاً"));
+    audioManager.correct.currentTime = 0;
+    audioManager.correct.play();
 }
 
 function playWrong() {
-    audioCtx.wrong.pause();
-    audioCtx.wrong.currentTime = 0;
-    audioCtx.wrong.play().catch(e => console.log("تفاعل مع الصفحة أولاً"));
+    audioManager.wrong.currentTime = 0;
+    audioManager.wrong.play();
 }
-
-// محرك لإيقاظ الصوت عند أول لمسة للشاشة (مهم جداً للموبايل)
-document.addEventListener('click', function() {
-    audioCtx.correct.load();
-    audioCtx.wrong.load();
-}, { once: true });
