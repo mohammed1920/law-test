@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اختبار القانون الدستوري | التحدي الرقمي</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;900&family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #c29d5f; /* لون ذهبي قانوني */
+            --bg: #0f172a;
+            --card: #1e293b;
+            --text: #f1f5f9;
+            --success: #10b981;
+            --error: #ef4444;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 15px;
+        }
+
+        .quiz-container {
+            width: 100%;
+            max-width: 550px;
+            background: var(--card);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,255,255,0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* خط زخرفي علوي */
+        .quiz-container::before {
+            content: ""; position: absolute; top: 0; left: 0; right: 0;
+            height: 5px; background: linear-gradient(90deg, var(--primary), #eab308);
+        }
+
+        header { text-align: center; margin-bottom: 30px; }
+        h1 { font-family: 'Cairo', sans-serif; font-size: 22px; color: var(--primary); margin-bottom: 5px; }
+        .progress-text { font-size: 13px; color: #94a3b8; }
+
+        .question-section { margin-bottom: 20px; }
+        #question { font-size: 18px; font-weight: 700; line-height: 1.6; margin-bottom: 20px; }
+
+        .options-list { display: flex; flex-direction: column; gap: 12px; }
+
+        .opt-btn {
+            background: #334155;
+            border: 2px solid transparent;
+            padding: 16px;
+            border-radius: 12px;
+            color: var(--text);
+            font-family: inherit;
+            font-size: 15px;
+            text-align: right;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .opt-btn:hover:not(:disabled) {
+            background: #475569;
+            transform: translateX(-5px);
+            border-color: var(--primary);
+        }
+
+        .opt-btn.correct { background: rgba(16, 185, 129, 0.2); border-color: var(--success); color: #d1fae5; }
+        .opt-btn.wrong { background: rgba(239, 68, 68, 0.2); border-color: var(--error); color: #fee2e2; }
+
+        #feedback {
+            margin-top: 20px; padding: 15px; border-radius: 10px;
+            background: rgba(194, 157, 95, 0.1);
+            font-size: 14px; border-right: 4px solid var(--primary);
+            display: none; animation: fadeIn 0.4s;
+        }
+
+        .next-btn {
+            width: 100%; margin-top: 20px; padding: 15px; border: none;
+            border-radius: 12px; background: var(--primary); color: #0f172a;
+            font-weight: 900; font-family: 'Cairo', sans-serif; font-size: 16px;
+            cursor: pointer; display: none; transition: 0.2s;
+        }
+
+        .next-btn:hover { background: #d4af72; transform: translateY(-2px); }
+
+        .result-screen { text-align: center; display: none; }
+        .result-screen .score { font-size: 48px; font-weight: 900; color: var(--primary); margin: 20px 0; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* للهواتف */
+        @media (max-width: 480px) {
+            .quiz-container { padding: 20px; }
+            h1 { font-size: 18px; }
+            .opt-btn { padding: 12px; font-size: 14px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="quiz-container">
+    <div id="quiz-box">
+        <header>
+            <h1>اختبار القانون الدستوري</h1>
+            <p class="progress-text" id="progress-text">السؤال 1 من 4</p>
+        </header>
+
+        <div class="question-section">
+            <h2 id="question">جاري تحميل السؤال...</h2>
+        </div>
+
+        <div class="options-list" id="options">
+            </div>
+
+        <div id="feedback"></div>
+
+        <button class="next-btn" id="next-btn" onclick="handleNext()">السؤال التالي ←</button>
+    </div>
+
+    <div class="result-screen" id="result-screen">
+        <header>
+            <h1>النتيجة النهائية</h1>
+        </header>
+        <div class="score" id="final-score">0/0</div>
+        <p id="result-message"></p>
+        <button class="next-btn" style="display:block" onclick="location.reload()">🔄 إعادة الاختبار</button>
+    </div>
+</div>
+
+<script>
+    // بيانات الأسئلة - يمكنك إضافة المزيد هنا بسهولة
+    const questions = [
+        {
+            q: "أي المعايير التالية يعتمد على تدوين القواعد في وثيقة رسمية بغض النظر عن مضمونها؟",
+            opts: ["المعيار الموضوعي", "المعيار الشكلي", "المعيار العرفي", "المعيار الفقهي"],
+            c: 1, // رقم الإجابة الصحيحة (يبدأ من 0)
+            hint: "المعيار الشكلي ينظر إلى الغلاف أو الوثيقة التي صدرت فيها القاعدة."
+        },
+        {
+            q: "تعتبر بريطانيا النموذج الأبرز لـ:",
+            opts: ["الدساتير الجامدة", "الدساتير المكتوبة", "الدساتير العرفية", "الدساتير الممنوحة"],
+            c: 2,
+            hint: "الدستور البريطاني غير مدون في وثيقة واحدة بل يعتمد على الأعراف والسوابق."
+        },
+        {
+            q: "ما هو الركن الذي يمثل النطاق الجغرافي لسيادة الدولة؟",
+            opts: ["الشعب", "السلطة السياسية", "الإقليم", "الاعتراف الدولي"],
+            c: 2,
+            hint: "الإقليم يشمل الأرض والمياه والجو التابع للدولة."
+        },
+        {
+            q: "الدستور الذي يتطلب تعديله إجراءات أشد من تعديل القانون العادي هو:",
+            opts: ["الدستور المرن", "الدستور الجامد", "الدستور المؤقت", "القانون الأساسي"],
+            c: 1,
+            hint: "الجمود هنا يقصد به صعوبة الإجراءات وليس عدم التغيير نهائياً."
+        }
+    ];
+
+    let current = 0;
+    let score = 0;
+
+    function loadQuestion() {
+        const qData = questions[current];
+        document.getElementById('question').innerText = qData.q;
+        document.getElementById('progress-text').innerText = `السؤال ${current + 1} من ${questions.length}`;
+        
+        const optionsDiv = document.getElementById('options');
+        optionsDiv.innerHTML = '';
+        
+        qData.opts.forEach((opt, i) => {
+            const btn = document.createElement('button');
+            btn.className = 'opt-btn';
+            btn.innerText = opt;
+            btn.onclick = () => checkAnswer(i, btn);
+            optionsDiv.appendChild(btn);
+        });
+
+        document.getElementById('feedback').style.display = 'none';
+        document.getElementById('next-btn').style.display = 'none';
+    }
+
+    function checkAnswer(index, btn) {
+        const qData = questions[current];
+        const allBtns = document.querySelectorAll('.opt-btn');
+        
+        // منع الضغط على أزرار أخرى
+        allBtns.forEach(b => b.disabled = true);
+
+        if (index === qData.c) {
+            btn.classList.add('correct');
+            score++;
+        } else {
+            btn.classList.add('wrong');
+            allBtns[qData.c].classList.add('correct'); // إظهار الصحيحة
+        }
+
+        const fb = document.getElementById('feedback');
+        fb.innerText = `💡 ملاحظة: ${qData.hint}`;
+        fb.style.display = 'block';
+        
+        const nextBtn = document.getElementById('next-btn');
+        nextBtn.innerText = (current === questions.length - 1) ? "مشاهدة النتيجة" : "السؤال التالي ←";
+        nextBtn.style.display = 'block';
+    }
+
+    function handleNext() {
+        current++;
+        if (current < questions.length) {
+            loadQuestion();
+        } else {
+            showResult();
+        }
+    }
+
+    function showResult() {
+        document.getElementById('quiz-box').style.display = 'none';
+        const resultScreen = document.getElementById('result-screen');
+        resultScreen.style.display = 'block';
+        
+        document.getElementById('final-score').innerText = `${score} / ${questions.length}`;
+        
+        let msg = "";
+        if(score === questions.length) msg = "ممتاز! أنت خبير في القانون الدستوري.";
+        else if(score >= questions.length/2) msg = "أداء جيد، يمكنك مراجعة بعض النقاط.";
+        else msg = "تحتاج لمراجعة المادة أكثر، بالتوفيق!";
+        
+        document.getElementById('result-message').innerText = msg;
+    }
+
+    // تشغيل السؤال الأول عند الفتح
+    loadQuestion();
+</script>
+
+</body>
+</html>
