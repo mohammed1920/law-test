@@ -3,57 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>اختبار القانون</title>
+    <title>منصة اختبارات القانون الدستوري</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;900&display=swap" rel="stylesheet">
     <style>
-        body { background: #0f172a; color: white; font-family: sans-serif; display: flex; justify-content: center; padding: 20px; }
-        .card { background: #1e293b; width: 100%; max-width: 400px; padding: 20px; border-radius: 15px; text-align: center; box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
-        h1 { color: #c29d5f; font-size: 20px; }
-        .btn { background: #334155; color: white; width: 100%; padding: 15px; margin: 10px 0; border: none; border-radius: 10px; cursor: pointer; text-align: right; font-size: 16px; }
-        .correct { background: #10b981; }
-        .wrong { background: #ef4444; }
-        .tg { display: block; margin: 20px 0; padding: 10px; color: #38bdf8; text-decoration: none; border: 1px dashed #38bdf8; border-radius: 8px; font-weight: bold; }
-        #next { background: #c29d5f; color: #0f172a; font-weight: bold; display: none; width: 100%; padding: 12px; border-radius: 10px; border: none; }
+        :root { --primary: #c29d5f; --bg: #0f172a; --card: #1e293b; --text: #f1f5f9; }
+        body { font-family: 'Cairo', sans-serif; background-color: var(--bg); color: var(--text); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
+        .dashboard { width: 100%; max-width: 500px; background: var(--card); padding: 30px; border-radius: 20px; text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.05); }
+        .book-title { color: var(--primary); font-size: 22px; font-weight: 900; margin-bottom: 5px; }
+        .part-title { color: #e2e8f0; font-size: 18px; margin-bottom: 5px; font-weight: 700; }
+        .author { color: #94a3b8; font-size: 13px; margin-bottom: 25px; }
+        .menu-label { text-align: right; font-size: 14px; margin-bottom: 15px; color: #cbd5e1; border-right: 3px solid var(--primary); padding-right: 10px; }
+        .parts-grid { display: grid; gap: 12px; }
+        .part-card { background: #334155; padding: 18px; border-radius: 12px; text-decoration: none; color: white; display: flex; justify-content: space-between; align-items: center; transition: 0.2s; border: 1px solid transparent; }
+        .part-card:hover { border-color: var(--primary); background: #475569; transform: scale(1.02); }
+        .part-info { text-align: right; }
+        .part-name { display: block; font-weight: bold; font-size: 15px; }
+        .arrow { color: var(--primary); font-weight: bold; }
+        .tg-footer { margin-top: 25px; display: block; padding: 10px; border: 1px dashed #38bdf8; color: #38bdf8; text-decoration: none; border-radius: 10px; font-size: 13px; }
     </style>
 </head>
 <body>
-    <div class="card" id="box">
-        <h1>اختبار القانون الدستوري</h1>
-        <p id="step" style="color:#94a3b8; font-size:12px; margin-bottom:20px;"></p>
-        <h2 id="q" style="font-size:18px; margin-bottom:20px;"></h2>
-        <div id="opts"></div>
-        <a href="https://t.me/M5M5P" class="tg">📢 قناة التليجرام: M5M5P@</a>
-        <button id="next" onclick="nextQ()">السؤال التالي ←</button>
+
+    <div class="dashboard">
+        <div class="book-title">مبادئ القانون الدستوري</div>
+        <div class="part-title">الباب الأول: نظرية الدولة</div>
+        <div class="author">الأستاذ الدكتور حميد حنون خالد</div>
+        
+        <div class="menu-label">اختر الفصل الدراسي:</div>
+        
+        <div class="parts-grid">
+            <a href="chapter1.html" class="part-card">
+                <div class="part-info">
+                    <span class="part-name">الفصل الأول: أصل الدولة</span>
+                </div>
+                <span class="arrow">←</span>
+            </a>
+
+            <a href="chapter2.html" class="part-card">
+                <div class="part-info">
+                    <span class="part-name">الفصل الثاني: الدولة وأركانها</span>
+                </div>
+                <span class="arrow">←</span>
+            </a>
+
+            <a href="chapter3.html" class="part-card">
+                <div class="part-info">
+                    <span class="part-name">الفصل الثالث: أنواع الدول</span>
+                </div>
+                <span class="arrow">←</span>
+            </a>
+        </div>
+
+        <a href="https://t.me/M5M5P" target="_blank" class="tg-footer">📢 تابع قناتنا: M5M5P@</a>
     </div>
 
-<script>
-    const data = [
-        {q: "أي المعايير التالية يعتمد على تدوين القواعد في وثيقة رسمية؟", opts: ["المعيار الموضوعي", "المعيار الشكلي", "المعيار العرفي", "المعيار الفقهي"], c: 1},
-        {q: "تعتبر بريطانيا النموذج الأبرز لـ:", opts: ["الدساتير الجامدة", "الدساتير المكتوبة", "الدساتير العرفية", "الدساتير الممنوحة"], c: 2},
-        {q: "ما هو الركن الذي يمثل النطاق الجغرافي لسيادة الدولة؟", opts: ["الشعب", "السلطة السياسية", "الإقليم", "الاعتراف الدولي"], c: 2}
-    ];
-    let cur = 0, score = 0;
-    function load() {
-        const item = data[cur];
-        document.getElementById('q').innerText = item.q;
-        document.getElementById('step').innerText = `سؤال ${cur+1} من ${data.length}`;
-        const div = document.getElementById('opts'); div.innerHTML = '';
-        item.opts.forEach((o, i) => {
-            const b = document.createElement('button'); b.className = 'btn'; b.innerText = o;
-            b.onclick = () => {
-                const btns = document.querySelectorAll('.btn'); btns.forEach(x => x.disabled = true);
-                if(i === item.c) { b.classList.add('correct'); score++; }
-                else { b.classList.add('wrong'); btns[item.c].classList.add('correct'); }
-                document.getElementById('next').style.display = 'block';
-            };
-            div.appendChild(b);
-        });
-    }
-    function nextQ() {
-        cur++;
-        if(cur < data.length) { load(); document.getElementById('next').style.display = 'none'; }
-        else { document.getElementById('box').innerHTML = `<h1>انتهى الاختبار</h1><div style="font-size:40px; margin:20px; color:#c29d5f;">${score}/${data.length}</div><a href="https://t.me/M5M5P" class="tg">انضم لقناتنا للمزيد</a><button class="btn" style="text-align:center" onclick="location.reload()">إعادة الاختبار</button>`; }
-    }
-    load();
-</script>
 </body>
 </html>
